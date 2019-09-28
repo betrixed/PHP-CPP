@@ -159,7 +159,7 @@ Value::Value(struct _zval_struct *val, bool ref)
         zend_reference *ref = Z_REF_P(val);
 
         // increment refcount
-        ++GC_REFCOUNT(ref);
+        GC_ADDREF(ref);
 
         // store the reference in our value
         ZVAL_REF(_val, ref);
@@ -238,7 +238,7 @@ Value Value::makeReference()
     zend_reference *ref = Z_REF_P(from);
 
     // increment reference count
-    GC_REFCOUNT(ref)++;
+    GC_ADDREF(ref);
 
     // copy the reference
     ZVAL_REF(to, ref);

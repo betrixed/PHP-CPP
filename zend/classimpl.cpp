@@ -520,7 +520,7 @@ zend_object *ClassImpl::cloneObject(zval *val)
     // a copy constructor). Because this function is directly called from the
     // Zend engine, we can call zend_error() (which does a longjmp()) to throw
     // an exception back to the Zend engine)
-    if (!cpp) zend_error(E_ERROR, "Unable to clone %s", entry->name);
+    if (!cpp) zend_error(E_ERROR, "Unable to clone %s", ZSTR_VAL(entry->name));
 
     // store the object
     auto *new_object = new ObjectImpl(entry, cpp, impl->objectHandlers(), 1);
@@ -1148,7 +1148,7 @@ zend_object *ClassImpl::createObject(zend_class_entry *entry)
     // report error on failure, because this function is called directly from the
     // Zend engine, we can call zend_error() here (which does a longjmp() back to
     // the Zend engine)
-    if (!cpp) zend_error(E_ERROR, "Unable to instantiate %s", entry->name);
+    if (!cpp) zend_error(E_ERROR, "Unable to instantiate %s", ZSTR_VAL(entry->name));
 
     // create the object in the zend engine
     auto *object = new ObjectImpl(entry, cpp, impl->objectHandlers(), 1);
@@ -1359,11 +1359,9 @@ zend_class_entry *ClassImpl::initialize(ClassBase *base, const std::string &pref
 #if PHP_VERSION_ID < 70300
         entry.iterator_funcs.funcs = IteratorImpl::functions();
 #else
-        // from 7.3 and up, we have to allocate it ourself
+        // Nothing yet, should be handled already
+        // zend_class_iterator_funcs not supported
         entry.iterator_funcs_ptr = (zend_class_iterator_funcs*) calloc(1, sizeof(zend_class_iterator_funcs));
-
-        // and we finally include the pointer to the functions in the newly allocated structure
-        entry.iterator_funcs_ptr->funcs = IteratorImpl::functions();
 #endif
     }
 

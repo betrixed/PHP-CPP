@@ -187,9 +187,13 @@ public:
             _constant.name = zend_string_alloc(prefix.size() + 1 + namelen, 1);
 
             // copy the entire namespace name, separator and constant name
-            ::strncpy(ZSTR_VAL(_constant.name), prefix.c_str(), prefix.size());
-            ::strncpy(ZSTR_VAL(_constant.name) + prefix.size(), "\\", 1);
-            ::strncpy(ZSTR_VAL(_constant.name) + prefix.size() + 1, _name, namelen + 1);
+            char* buf = ZSTR_VAL(_constant.name); 
+            ::strncpy(buf, prefix.c_str(), prefix.size());
+            buf += prefix.size();
+            *buf++ = '\\'; //separator
+            ::strncpy(buf, _name, namelen + 1);
+            //::strncpy(ZSTR_VAL(_constant.name) + prefix.size(), "\\", 1);
+            //::strncpy(ZSTR_VAL(_constant.name) + prefix.size() + 1, _name, namelen + 1);
         }
         else
         {
