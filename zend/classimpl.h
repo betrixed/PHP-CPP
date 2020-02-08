@@ -259,7 +259,7 @@ public:
      *  @param  cache_slot      The cache slot used
      *  @return zval
      */
-    static void writeProperty(zval *object, zval *name, zval *value, void **cache_slot);
+    static zval* writeProperty(zval *object, zval *name, zval *value, void **cache_slot);
 
     /**
      *  Function that is called to check whether a certain property is set

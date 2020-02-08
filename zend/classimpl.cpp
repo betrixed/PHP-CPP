@@ -909,7 +909,7 @@ zval *ClassImpl::readProperty(zval *object, zval *name, int type, void **cache_s
  *  @param  cache_slot      The cache slot used
  *  @return zval
  */
-void ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cache_slot)
+zval* ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cache_slot)
 {
     // retrieve the object and class
     Base *base = ObjectImpl::find(object)->object();
@@ -935,12 +935,14 @@ void ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cach
         if (iter == impl->_properties.end())
         {
             // use the __set method
-            meta->callSet(base, key, value);
+            return meta->callSet(base, key, value);
         }
         else
         {
             // check if it could be set
-            if (iter->second->set(base, value)) return;
+            zval* result = iter->second->set(base, value);
+            if (result != nullptr)
+                return result;
 
             // read-only property
             zend_error(E_ERROR, "Unable to write to read-only property %s", (const char *)key);
@@ -952,7 +954,7 @@ void ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cach
         if (!std_object_handlers.write_property) return;
 
         // call the default
-        std_object_handlers.write_property(object, name, value, cache_slot);
+        return std_object_handlers.write_property(object, name, value, cache_slot);
     }
     catch (Exception &exception)
     {
@@ -960,6 +962,8 @@ void ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cach
         // implementation, send it to user space
         process(exception);
     }
+    // Return something which means "I give up"
+    return nullptr;
 }
 
 /**

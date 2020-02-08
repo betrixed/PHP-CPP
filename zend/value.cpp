@@ -1495,8 +1495,11 @@ bool Value::contains(const char *key, int size) const
     else if (isObject())
     {
         // retrieve the object pointer and check whether the property we are trying to retrieve
-        if (zend_check_property_access(Z_OBJ_P(_val), String(key, size)) == FAILURE) return false;
-
+        if (zend_check_property_access(Z_OBJ_P(_val), String(key, size), true) == FAILURE) {
+            // dynamic is checked first, declared second
+            if (zend_check_property_access(Z_OBJ_P(_val), String(key, size), false) == FAILURE)
+                return false;
+        }
         // check if the 'has_property' method is available for this object
         auto *has_property = Z_OBJ_HT_P(_val)->has_property;
 

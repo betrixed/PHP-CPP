@@ -618,13 +618,13 @@ private:
      *  @param  name
      *  @param  value
      */
-    virtual void callSet(Base *base, const Value &name, const Value &value) const override
+    virtual zval* callSet(Base *base, const Value &name, const Value &value) const override
     {
         // cast to actual object
         T *obj = (T *)base;
 
         // pass on
-        obj->__set(name, value);
+        return obj->__set(name, value);
     }
 
     /**

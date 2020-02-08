@@ -164,7 +164,7 @@ public:
      *  @param  key
      *  @param  value
      */
-    void __set(const Php::Value &key, const Php::Value &value) const;
+    zval* __set(const Php::Value &key, const Php::Value &value) const;
 
     /**
      *  Retrieve a property
