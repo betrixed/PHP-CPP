@@ -940,6 +940,10 @@ zval* ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cac
         else
         {
             // check if it could be set
+            // we have a shaed pointer to a Property?
+            //Property* p = (iter->second)->get();  // get the shared object
+            // call the property set interface
+
             zval* result = iter->second->set(base, value);
             if (result != nullptr)
                 return result;
@@ -951,7 +955,7 @@ zval* ClassImpl::writeProperty(zval *object, zval *name, zval *value, void **cac
     catch (const NotImplemented &exception)
     {
         // __set() function was not overridden by user, check if there is a default
-        if (!std_object_handlers.write_property) return;
+        if (!std_object_handlers.write_property) return nullptr;
 
         // call the default
         return std_object_handlers.write_property(object, name, value, cache_slot);

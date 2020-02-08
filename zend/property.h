@@ -143,12 +143,12 @@ public:
      *  @param  value       New value
      *  @return bool
      */
-    bool set(Base *base, const Value &value)
+    zval* set(Base *base, const Value &value)
     {
         switch (_stype) {
-        case 0: (base->*_setter.s0)(value); return true;
-        case 1: (base->*_setter.s1)(value); return true;
-        default: return false;
+        case 0: return (base->*_setter.s0)(value); 
+        case 1: return (base->*_setter.s1)(value);
+        default: return nullptr;
         }
     }
 };    
