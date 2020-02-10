@@ -1096,6 +1096,9 @@ public:
      */
     std::string debugZval() const;
 
+    operator struct _zval_struct*   () {
+        return reinterpret_cast<struct _zval_struct *> (&_val);
+    }
 private:
     /**
      *  Iterate over key value pairs
@@ -1134,6 +1137,7 @@ private:
      *  @return Value
      */
     Value& operator=(struct _zval_struct* value);
+    
 
 protected:
     /**

@@ -46,8 +46,9 @@ bool Base::__isset(const Php::Value &key) const
  * 
  *  @param  key
  *  @param  value
+ *  @return Pointer to struct _zval_struct  (since later 7.3)
  */
-zval* Base::__set(const Php::Value &key, const Php::Value &value) const
+struct _zval_struct* Base::__set(const Php::Value &key, const Php::Value &value) const
 {
     // throw an exception that will be caught in the ClassBase class, 
     // so that the default implementation of the unset function can be called

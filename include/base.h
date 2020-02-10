@@ -163,8 +163,9 @@ public:
      *
      *  @param  key
      *  @param  value
+     *  @return pointer to _zval_struct (since later version 7.3)
      */
-    zval* __set(const Php::Value &key, const Php::Value &value) const;
+    struct _zval_struct* __set(const Php::Value &key, const Php::Value &value) const;
 
     /**
      *  Retrieve a property

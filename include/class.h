@@ -617,8 +617,9 @@ private:
      *  @param  base
      *  @param  name
      *  @param  value
+     *  @return Pointer to struct _zval_struct* (since later 7.3)
      */
-    virtual zval* callSet(Base *base, const Value &name, const Value &value) const override
+    virtual struct _zval_struct* callSet(Base *base, const Value &name, const Value &value) const override
     {
         // cast to actual object
         T *obj = (T *)base;

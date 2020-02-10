@@ -10,7 +10,7 @@
  *  @copyright 2014 Copernica BV
  */
 #include "includes.h"
-
+#include <zend_compile.h>
 /**
  *  Set up namespace
  */
@@ -19,12 +19,12 @@ namespace Php {
 /**
  *  The modifiers are constants
  */
-const int Static    =   0x01;
-const int Abstract  =   0x02;
-const int Final     =   0x04;
-const int Public    =   0x100;
-const int Protected =   0x200;
-const int Private   =   0x400;
+const int Static    =   ZEND_ACC_STATIC;
+const int Abstract  =   ZEND_ACC_ABSTRACT;
+const int Final     =   ZEND_ACC_FINAL;
+const int Public    =   ZEND_ACC_PUBLIC;
+const int Protected =   ZEND_ACC_PROTECTED;
+const int Private   =   ZEND_ACC_PRIVATE;
 const int Const     =   0;
 
 /**

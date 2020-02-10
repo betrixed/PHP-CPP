@@ -114,7 +114,7 @@ private:
      *  @param  rv      Pointer to where to store the data
      *  @return The result (same as the ptr input)
      */
-    static zval *toZval(Value &&value, int type, zval *rv);
+    static struct _zval_struct* toZval(Value &&value, int type, struct _zval_struct* rv);
 
 public:
     /**
@@ -248,7 +248,7 @@ public:
      *  @param  rv              Pointer to where to store the data
      *  @return zval
      */
-    static zval *readProperty(zval *object, zval *name, int type, void **cache_slot, zval *rv);
+    static struct _zval_struct* readProperty(zval *object, zval *name, int type, void **cache_slot, zval *rv);
 
     /**
      *  Function that is called when a property is set / updated
@@ -259,7 +259,7 @@ public:
      *  @param  cache_slot      The cache slot used
      *  @return zval
      */
-    static zval* writeProperty(zval *object, zval *name, zval *value, void **cache_slot);
+    static struct _zval_struct* writeProperty(zval *object, zval *name, zval *value, void **cache_slot);
 
     /**
      *  Function that is called to check whether a certain property is set

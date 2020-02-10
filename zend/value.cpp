@@ -200,8 +200,8 @@ Value::Value(const IniValue &value) : Value((const char *)value) {}
 Value::Value(const Value &that)
 {
     // retrieve value to copy from and to
-    zval* from = that._val;
-    zval* to   = _val;
+    struct _zval_struct* from = that._val;
+    struct _zval_struct* to   = _val;
 
     // make sure it is not a reference
     ZVAL_DEREF(from);
@@ -228,8 +228,8 @@ Value Value::makeReference()
     Value result;
 
     // the value we are making a reference to and the reference to create
-    zval* from = _val;
-    zval* to   = result._val;
+    struct _zval_struct* from = _val;
+    struct _zval_struct* to   = result._val;
 
     // make sure it is a reference
     ZVAL_MAKE_REF(from);
@@ -372,7 +372,7 @@ Value &Value::operator=(Value &&value) _NOEXCEPT
 Value& Value::operator=(struct _zval_struct* value)
 {
     // the value to assign to
-    zval* to = _val;
+    struct _zval_struct* to = _val;
 
     // Dereference values
     if (Z_ISREF_P(value))   value = Z_REFVAL_P(value);
@@ -439,7 +439,7 @@ Value &Value::operator=(const Value &value)
  */
 Value &Value::operator=(std::nullptr_t value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_NULL(&z);
     return operator=(&z);
@@ -452,7 +452,7 @@ Value &Value::operator=(std::nullptr_t value)
  */
 Value &Value::operator=(int16_t value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_LONG(&z, value);
     return operator=(&z);
@@ -465,7 +465,7 @@ Value &Value::operator=(int16_t value)
  */
 Value &Value::operator=(int32_t value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_LONG(&z, value);
     return operator=(&z);
@@ -478,7 +478,7 @@ Value &Value::operator=(int32_t value)
  */
 Value &Value::operator=(int64_t value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_LONG(&z, value);
     return operator=(&z);
@@ -491,7 +491,7 @@ Value &Value::operator=(int64_t value)
  */
 Value &Value::operator=(bool value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_BOOL(&z, value);
     return operator=(&z);
@@ -504,7 +504,7 @@ Value &Value::operator=(bool value)
  */
 Value &Value::operator=(char value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_STRINGL(&z, &value, 1);
     operator=(&z);
@@ -519,7 +519,7 @@ Value &Value::operator=(char value)
  */
 Value &Value::operator=(const std::string &value)
 {
-    zval z;
+    struct _zval_struct z;
 
     if (value.size()) {
         ZVAL_STRINGL(&z, value.c_str(), value.size());
@@ -540,7 +540,7 @@ Value &Value::operator=(const std::string &value)
  */
 Value &Value::operator=(const char *value)
 {
-    zval z;
+    struct _zval_struct z;
 
     if (value) {
         ZVAL_STRINGL(&z, value, std::strlen(value));
@@ -561,7 +561,7 @@ Value &Value::operator=(const char *value)
  */
 Value &Value::operator=(double value)
 {
-    zval z;
+    struct _zval_struct z;
 
     ZVAL_DOUBLE(&z, value);
     return operator=(&z);
@@ -751,7 +751,7 @@ Value Value::operator%(double value)                { return Value(numericValue(
 static Value do_exec(const zval *object, zval *method, int argc, zval *argv)
 {
     // the return zval
-    zval retval;
+    struct _zval_struct retval;
 
     // the current exception
     zend_object *oldException = EG(exception);

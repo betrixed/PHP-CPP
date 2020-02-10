@@ -70,8 +70,8 @@ typedef Value   (Base::*method_callback_7)(Parameters &) const;
  */
 typedef Value   (Base::*getter_callback_0)();
 typedef Value   (Base::*getter_callback_1)() const;
-typedef zval*    (Base::*setter_callback_0)(const Php::Value &value);
-typedef zval*    (Base::*setter_callback_1)(const Php::Value &value) const;
+typedef struct _zval_struct*   (Base::*setter_callback_0)(const Php::Value &value);
+typedef struct _zval_struct*    (Base::*setter_callback_1)(const Php::Value &value) const;
 /**
  *  Class definition
  */
@@ -170,7 +170,7 @@ public:
      *  @return Value
      */
     virtual Value callGet(Base *base, const Value &name) const { return nullptr; }
-    virtual zval* callSet(Base *base, const Value &name, const Value &value) const { return nullptr;}
+    virtual struct _zval_struct* callSet(Base *base, const Value &name, const Value &value) const { return nullptr;}
     virtual void  callUnset(Base *base, const Value &name) const {}
     virtual bool  callIsset(Base *base, const Value &name) const { return false; }
 
