@@ -25,9 +25,9 @@ namespace Php {
  */
 enum class ClassType {
     Regular     =   0x00,
-    Abstract    =   0x20,
-    Final       =   0x04,
-    Interface   =   0x40,
+    Abstract    =   0x40, // 0x20 ZEND_ACC_ABSTRACT (1 << 6) = (0= 0x01, 1=0x02, 2=0x04, 3=0x08 4=0x10, 5=0x20, 6=0x40)
+    Final       =   0x20, // 0x04 ZEND_ACC_FINAL  (1 <<  5) 
+    Interface   =   0x00, // ZEND_ACC_INTERFACE (1 <<  0)
 };
 
 /**
