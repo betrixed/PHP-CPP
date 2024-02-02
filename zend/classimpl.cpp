@@ -1294,7 +1294,7 @@ zend_object_iterator *ClassImpl::getIterator(zend_class_entry *entry, zval *obje
  *  @param  buf_len     Size of the bufffer
  *  @param  data        ??
  *  @return int
- */
+ 
 int ClassImpl::serialize(zval *object, unsigned char **buffer, size_t *buf_len, zend_serialize_data *data)
 {
     // get the serializable object
@@ -1324,6 +1324,7 @@ int ClassImpl::serialize(zval *object, unsigned char **buffer, size_t *buf_len, 
     // done
     return SUCCESS;
 }
+*/
 
 /**
  *  Method that is called to unserialize an object
@@ -1332,7 +1333,7 @@ int ClassImpl::serialize(zval *object, unsigned char **buffer, size_t *buf_len, 
  *  @param  buffer      Buffer holding the unserialized data
  *  @param  data        All the unserialize data
  *  @return int
- */
+ 
 int ClassImpl::unserialize(zval *object, zend_class_entry *entry, const unsigned char *buffer, size_t buf_len, zend_unserialize_data *data)
 {
     // create the PHP object
@@ -1361,7 +1362,7 @@ int ClassImpl::unserialize(zval *object, zend_class_entry *entry, const unsigned
     // done
     return SUCCESS;
 }
-
+*/
 /**
  *  Helper method to check if a function is registered for this instance
  *  @param name         name of the function to check for
@@ -1430,7 +1431,7 @@ const struct _zend_function_entry *ClassImpl::entries()
     }
 
     // if the class is serializable, we might need some extra methods
-    if (_base->serializable())
+    /*if (_base->serializable())
     {
         // the method objectneed to stay in scope for the lifetime of the script (because the register a pointer
         // to an internal string buffer) -- so we create them as static variables
@@ -1441,7 +1442,7 @@ const struct _zend_function_entry *ClassImpl::entries()
         if (!hasMethod("serialize")) serialize.initialize(&_entries[i++], _name);
         if (!hasMethod("unserialize")) unserialize.initialize(&_entries[i++], _name);
     }
-
+    */
     // last entry should be set to all zeros
     zend_function_entry *last = &_entries[i];
 
@@ -1504,12 +1505,13 @@ zend_class_entry *ClassImpl::initialize(ClassBase *base, const std::string &pref
     }
 
     // for serializable classes, we install callbacks for serializing and unserializing
-    if (_base->serializable())
+    /*if (_base->serializable())
     {
         // add handlers to serialize and unserialize
         entry.serialize = &ClassImpl::serialize;
         entry.unserialize = &ClassImpl::unserialize;
     }
+    */
 
     // do we have a base class?
     if (_parent)

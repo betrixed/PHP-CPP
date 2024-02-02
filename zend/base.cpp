@@ -222,7 +222,7 @@ int Base::__compare(const Base &that) const
  *  Note that a call to serialize($object) does not end up in this function, but
  *  is handled by the user-space implementation of Serializable::serialize()).
  *  @return Php::Value
- */
+
 Php::Value Base::__serialize()
 {
     // 'this' refers to a Php::Base class, but we expect that is also implements the Serializable
@@ -235,13 +235,13 @@ Php::Value Base::__serialize()
     // pass the call to the interface
     return serializable->serialize();
 }
-
+ */
 /**
  *  Method that is called when an explicit call to $object->unserialize() is made
  *  Note that a call to unserialize($string) does not end up in this function, but
  *  is handled by the user-space implementation of Serializable::unserialize()).
  *  @param params       The passed parameters
- */
+
 void Base::__unserialize(Php::Parameters &params)
 {
     // 'this' refers to a Php::Base class, but we expect that is also implements the Serializable
@@ -260,6 +260,7 @@ void Base::__unserialize(Php::Parameters &params)
     // pass the call to the interface
     serializable->unserialize(param.rawValue(), param.size());
 }
+ */
 
 /**
  *  Method that is called when an explicit call to $object->count() is made
