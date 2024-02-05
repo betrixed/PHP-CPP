@@ -11,7 +11,6 @@
  *  Dependencies
  */
 #include "includes.h"
-#include "string.h"
 
 /**
  *  Open the PHP namespace
@@ -31,7 +30,7 @@ bool class_exists(const char *classname, size_t len, bool autoload)
     if (autoload)
     {
         // retrieve class entry
-        auto *ce = zend_lookup_class(String{ classname, len });
+        auto *ce = zend_lookup_class(ZString{ classname, len });
 
         // no auto-load
         if (!ce) return false;
@@ -45,7 +44,7 @@ bool class_exists(const char *classname, size_t len, bool autoload)
         if (len > 0 && classname[0] == '\\') { classname++; len--; }
 
         // create the string wrapper
-        String string{ classname, len };
+        ZString string{ classname, len };
 
         // copy the name to lowercase, but ignore the starting slash (if there is one)
         zend_str_tolower(string.data(), string.size());

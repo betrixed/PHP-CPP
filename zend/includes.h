@@ -88,6 +88,8 @@
 #include "../include/parameters.h"
 #include "../include/modifiers.h"
 #include "../include/base.h"
+#include "../include/zstring.h"
+#include "../include/matchregx.h"
 #include "../include/countable.h"
 #include "../include/arrayaccess.h"
 #include "../include/serializable.h"

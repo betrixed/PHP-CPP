@@ -11,7 +11,6 @@
  *  Dependencies
  */
 #include "includes.h"
-#include "string.h"
 
 /**
  *  Set up namespace
@@ -38,7 +37,7 @@ Value constant(const char *name)
 Value constant(const char *constant, size_t size)
 {
     // retrieve the constant
-    auto *result = zend_get_constant(String{ constant, size });
+    auto *result = zend_get_constant(ZString{ constant, size });
 
     // did the constant exist?
     if (!result) return nullptr;
@@ -140,7 +139,7 @@ bool define(const std::string &name, const Value &value)
 bool defined(const char *name, size_t size)
 {
     // retrieve the constant
-    return zend_get_constant_ex(String{ name, size }, nullptr, ZEND_FETCH_CLASS_SILENT) != nullptr;
+    return zend_get_constant_ex(ZString{ name, size }, nullptr, ZEND_FETCH_CLASS_SILENT) != nullptr;
 }
 
 /**

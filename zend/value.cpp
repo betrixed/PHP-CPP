@@ -25,7 +25,6 @@
  *  @copyright 2013 - 2019 Copernica BV
  */
 #include "includes.h"
-#include "string.h"
 #include "lowercase.h"
 #include "macros.h"
 
@@ -833,7 +832,7 @@ bool Value::isCallable(const char *name)
     zend_class_entry *ce = Z_OBJCE_P(_val);
 
     // convert the name to lowercase
-    LowerCase methodname{String(name)};
+    LowerCase methodname{ZString(name)};
 
     // check if the function indeed exists
     if (zend_hash_exists(&ce->function_table, methodname)) return true;
@@ -1192,7 +1191,7 @@ bool Value::instanceOf(const char *classname, size_t size, bool allowString) con
     if (!this_ce) return false;
 
     // now we can look up the actual class
-    auto *ce = zend_lookup_class_ex(String(classname, size), nullptr, 0);
+    auto *ce = zend_lookup_class_ex(ZString(classname, size), nullptr, 0);
 
     // no such class, then we are not instanceof
     if (!ce) return false;
@@ -1219,7 +1218,7 @@ bool Value::derivedFrom(const char *classname, size_t size, bool allowString) co
     if (!this_ce) return false;
 
     // now we can look up the actual class
-    auto *ce = zend_lookup_class_ex(String(classname, size), nullptr, 0);
+    auto *ce = zend_lookup_class_ex(ZString(classname, size), nullptr, 0);
 
     // unable to find the class entry?
     if (!ce) return false;
@@ -1332,6 +1331,12 @@ const char *Value::rawValue() const
 
     // there is no raw value
     return nullptr;
+}
+
+ZString Value::zendStr() const {
+    zval* z = _val;
+    zend_string* zs = zval_get_string(z);
+    return ZString(zs);
 }
 
 /**
@@ -1510,15 +1515,15 @@ bool Value::contains(const char *key, int size) const
     if (isArray())
     {
         // check if index is already in the array
-        return zend_hash_find(Z_ARRVAL_P(_val.dereference()), String(key, size)) != nullptr;
+        return zend_hash_find(Z_ARRVAL_P(_val.dereference()), ZString(key, size)) != nullptr;
     }
     else if (isObject())
     {
         // retrieve the object pointer and check whether the property we are trying to retrieve
 #if PHP_VERSION_ID < 70400
-        if (zend_check_property_access(Z_OBJ_P(_val), String(key, size)) == FAILURE) return false;
+        if (zend_check_property_access(Z_OBJ_P(_val), ZString(key, size)) == FAILURE) return false;
 #else
-        if (zend_check_property_access(Z_OBJ_P(_val), String(key, size), 0) == FAILURE) return false;
+        if (zend_check_property_access(Z_OBJ_P(_val), ZString(key, size), 0) == FAILURE) return false;
 #endif
         // check if the 'has_property' method is available for this object
         auto *has_property = Z_OBJ_HT_P(_val)->has_property;
@@ -1593,7 +1598,7 @@ Value Value::get(const char *key, int size) const
     if (isArray())
     {
         // find the result
-        auto val = zend_hash_find(Z_ARRVAL_P(_val.dereference()), String(key, size));
+        auto val = zend_hash_find(Z_ARRVAL_P(_val.dereference()), ZString(key, size));
 
         // wrap it in a value if it isn't null, otherwise return an empty value
         return val ? Value(val) : Value();
@@ -1724,7 +1729,7 @@ void Value::set(const char *key, int size, const Value &value)
     zval *current;
 
     // check if this index is already in the array, otherwise we return NULL
-    if (isArray() && (current = zend_hash_find(Z_ARRVAL_P(_val.dereference()), String(key, size))))
+    if (isArray() && (current = zend_hash_find(Z_ARRVAL_P(_val.dereference()), ZString(key, size))))
     {
         // skip if nothing is going to change
         if (value._val == current) return;
@@ -1775,7 +1780,7 @@ void Value::unset(const char *key, int size)
         SEPARATE_ZVAL_IF_NOT_REF(_val);
 
         // remove the index
-        zend_hash_del(Z_ARRVAL_P(_val.dereference()), String(key, size));
+        zend_hash_del(Z_ARRVAL_P(_val.dereference()), ZString(key, size));
     }
 }
 

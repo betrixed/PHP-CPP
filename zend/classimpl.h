@@ -369,8 +369,8 @@ public:
      *  @param  data        Structure describing the serialize/unserialize data
      *  @return int
      */
-    /* static int serialize(zval *object, unsigned char **buffer, size_t *buf_len, zend_serialize_data *data);
-    static int unserialize(zval *object, zend_class_entry *entry, const unsigned char *buffer, size_t buf_len, zend_unserialize_data *data); */
+    static int serialize(zval *object, unsigned char **buffer, size_t *buf_len, zend_serialize_data *data);
+    static int unserialize(zval *object, zend_class_entry *entry, const unsigned char *buffer, size_t buf_len, zend_unserialize_data *data);
 
     /**
      *  Add a method to the class

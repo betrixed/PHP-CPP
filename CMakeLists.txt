@@ -132,6 +132,7 @@ SET(PHPCPP_ZEND_SOURCES
   zend/ini.cpp
   zend/inivalue.cpp
   zend/iteratorimpl.cpp
+  zend/matchregx.cpp
   zend/members.cpp
   zend/module.cpp
   zend/namespace.cpp
@@ -214,6 +215,7 @@ SET(PHPCPP_HEADERS_INCLUDE
   include/inivalue.h
   include/interface.h
   include/iterator.h
+  include/matchregx.h
   include/modifiers.h
   include/namespace.h
   include/noexcept.h

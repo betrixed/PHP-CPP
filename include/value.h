@@ -1,3 +1,5 @@
+#ifndef PHP_VALUE_H
+#define PHP_VALUE_H
 /**
  *  Value.h
  *
@@ -22,6 +24,8 @@
  *  Dependencies
  */
 #include "zval.h"
+
+#include "zstring.h"
 
 /**
  *  Set up namespace
@@ -725,6 +729,7 @@ public:
         return vectorValue<T>();
     }
 
+
     /**
      *  Convert the object to a set
      *  @return std::set
@@ -768,6 +773,14 @@ public:
      *  @return Value
      */
     Value get(const char *key, int size=-1) const;
+
+
+    /**
+     * Get a referenced zend_string wrapper ( for String type )
+     * 
+     */
+
+    ZString zendStr() const;
 
     /**
      *  Get access to a certain assoc member
@@ -1218,6 +1231,7 @@ protected:
     friend class Script;
     friend class ConstantImpl;
     friend class Stream;
+    friend class ClassCheck;
 
     /**
      *  Friend functions which have to access that zval directly
@@ -1255,4 +1269,6 @@ X &operator%=(X &x, const Php::Value &value) { return x %= static_cast<X>(value)
 /**
  *  End of namespace
  */
-}
+};
+
+#endif

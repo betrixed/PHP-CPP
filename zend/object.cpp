@@ -5,7 +5,6 @@
  *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
-#include "string.h"
 
 /**
  *  Set up namespace
@@ -31,7 +30,7 @@ Object::Object(const char *name, Base *base) : Value()
         // this is a brand new object that should be allocated, the C++ instance
         // is already there (created by the extension) but it is not yet stored
         // in PHP, find out the classname first
-        auto *entry = zend_fetch_class(String{ name }, ZEND_FETCH_CLASS_SILENT);
+        auto *entry = zend_fetch_class(ZString{ name }, ZEND_FETCH_CLASS_SILENT);
         if (!entry) throw Error(std::string("Unknown class name ") + name);
 
         // construct an implementation (this will also set the implementation
@@ -104,7 +103,7 @@ Object::Object(const Value &value) : Value()
 bool Object::instantiate(const char *name)
 {
     // convert the name into a class_entry
-    auto *entry = zend_fetch_class(String{ name }, ZEND_FETCH_CLASS_SILENT);
+    auto *entry = zend_fetch_class(ZString{ name }, ZEND_FETCH_CLASS_SILENT);
     if (!entry) throw Error(std::string("Unknown class name ") + name);
 
     // initiate the zval (which was already allocated in the base constructor)
@@ -120,7 +119,7 @@ bool Object::instantiate(const char *name)
     //          and then we overwrite it with a specific class
 
     // initialize the string for __construct only once
-    static String construct{ "__construct" };
+    static ZString construct{ "__construct" };
 
     // return whether there is a __construct function
     return zend_hash_exists(&entry->function_table, construct);

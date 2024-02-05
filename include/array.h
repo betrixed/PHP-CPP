@@ -109,6 +109,17 @@ public:
     }
 
     /**
+     *  Really want to extend array of integer indexed values, like $php[] = value;
+     *  without extra work of getting count, to become new index
+     *
+    Array &Array::operator+=(const Value &value) 
+    {
+
+
+
+    } */
+
+    /**
      *  Move assignment operator
      *  @param  value
      *  @return Array

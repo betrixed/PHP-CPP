@@ -1,16 +1,10 @@
-/**
- *  string.h
- *
- *  Simple wrapper around a zend_string object that
- *  implements RAII. This helps to avoid memory leaks
- *
- *  @copyright 2016 Copernica B.V.
- */
+#ifndef ZSTRING_H
+#define ZSTRING_H
 
 /**
- *  Include guard
+ *  make available zend_string wrapper (strng.h) from PHP_CPP
  */
-#pragma once
+
 
 /**
  *  Dependencies
@@ -26,7 +20,7 @@ namespace Php {
 /**
  *  Wrapper class for a zend_string
  */
-class String
+class PHPCPP_EXPORT ZString
 {
 private:
     /**
@@ -40,7 +34,7 @@ public:
      *
      *  @param  string  The string to wrap
      */
-    String(zend_string *string) : _string(string)
+    ZString(zend_string *string) : _string(string)
     {
         // add another reference to the string
         zend_string_addref(_string);
@@ -51,14 +45,14 @@ public:
      *
      *  @param  string  The string to wrap
      */
-    String(const std::string &string) : _string(zend_string_init(string.data(), string.size(), 1)) {}
+    ZString(const std::string &string) : _string(zend_string_init(string.data(), string.size(), 1)) {}
 
     /**
      *  Constructor
      *
      *  @param  string  The string to wrap
      */
-    String(const char *string) : _string(zend_string_init(string, std::strlen(string), 1)) {}
+    ZString(const char *string) : _string(zend_string_init(string, std::strlen(string), 1)) {}
 
     /**
      *  Constructor
@@ -66,7 +60,7 @@ public:
      *  @param  string  The string to wrap
      *  @param  size    Number of bytes in the string
      */
-    String(const char *string, size_t size) : _string(zend_string_init(string, size, 1)) {}
+    ZString(const char *string, size_t size) : _string(zend_string_init(string, size, 1)) {}
 
     /**
      *  Constructor
@@ -74,14 +68,14 @@ public:
      *  @param  string  The string to wrap
      */
     template <size_t size>
-    String(const char (&string)[size]) : _string(zend_string_init(string, size - 1, 1)) {}
+    ZString(const char (&string)[size]) : _string(zend_string_init(string, size - 1, 1)) {}
 
     /**
      *  Copy constructor
      *
      *  @param  that    The string to copy
      */
-    String(const String &that) : _string(that._string)
+    ZString(const ZString &that) : _string(that._string)
     {
         // increment refcount
         zend_string_addref(_string);
@@ -92,7 +86,7 @@ public:
      *
      *  @param  that    The string to move
      */
-    String(String &&that) : _string(that._string)
+    ZString(ZString &&that) : _string(that._string)
     {
         // reset other string
         that._string = nullptr;
@@ -101,7 +95,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~String()
+    virtual ~ZString()
     {
         // release the reference, freeing the
         // string if we are the last referee
@@ -164,4 +158,7 @@ public:
 /**
  *  End namespace
  */
-}
+};
+
+
+#endif

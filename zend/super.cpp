@@ -5,7 +5,6 @@
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  */
 #include "includes.h"
-#include "string.h"
 
 /**
  *  Set up namespace
@@ -32,7 +31,7 @@ Value Super::value()
     // call zend_is_auto_global to ensure that the just-in-time globals are loaded
     if (_name) {
         // make the variable an auto global
-        zend_is_auto_global(String{ _name });
+        zend_is_auto_global(ZString{ _name });
 
         // reset because we only need to do this once
         _name = nullptr;
