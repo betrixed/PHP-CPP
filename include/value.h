@@ -190,7 +190,7 @@ public:
     Value &operator=(double value);
     Value &operator=(const HashMember<std::string> &value);
     Value &operator=(const HashMember<int> &value);
-
+    Value &operator=(ZString &value);
     /**
      *  Add a value to the object
      *  @param  value
@@ -787,10 +787,10 @@ public:
 
 
     /**
-     * Return reference to class name zend_string, if object
+     * Return string value with class name
      */
-    ZString className();
-    
+    Value className();
+
     /**
      * Return reference counted zend_string*
      * @return ZString

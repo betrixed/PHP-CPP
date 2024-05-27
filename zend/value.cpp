@@ -563,6 +563,23 @@ Value &Value::operator=(const std::string &value)
     return *this;
 }
 
+Value& Value::operator=(ZString &value)
+{
+    zval z;
+
+    if (value.valid())
+    {
+        ZVAL_STRINGL(&z, value.data(), value.size());
+    }
+    else {
+        ZVAL_EMPTY_STRING(&z);
+    }
+
+    operator=(&z);
+    zval_dtor(&z);
+    return *this;
+}
+
 /**
  *  Assignment operator
  *  @param  value
@@ -1353,13 +1370,14 @@ const char *Value::rawValue() const
     return nullptr;
 }
 
-ZString Value::className() {
+Value Value::className() {
     if (isObject()) {
-        return zend_std_get_class_name(Z_OBJ_P(_val));
+        zend_class_entry *zs = classEntry(false);
+        if (zs) {
+            return Php::Value(zs->name);
+        }
     }
-    else {
-        return ZString();
-    }
+    return Php::Value();
 }
 /**
  * Useful for passing to PHP functions
