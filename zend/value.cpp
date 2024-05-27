@@ -1353,6 +1353,22 @@ const char *Value::rawValue() const
     return nullptr;
 }
 
+ZString Value::className() {
+    if (isObject()) {
+        return zend_std_get_class_name(Z_OBJ_P(_val));
+    }
+    else {
+        return ZString();
+    }
+}
+/**
+ * Useful for passing to PHP functions
+ */ 
+ZString Value::zendStr() const {
+    zval* z = _val;
+    zend_string* zs = zval_get_string(z);
+    return ZString(zs);
+}
 /**
  *  Helper function for string comparison
  *  @param  value

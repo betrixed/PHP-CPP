@@ -1,3 +1,6 @@
+#ifndef PHP_VALUE_H
+#define PHP_VALUE_H
+
 /**
  *  Value.h
  *
@@ -22,6 +25,10 @@
  *  Dependencies
  */
 #include "zval.h"
+
+#ifndef ZSTRING_H
+#include "zstring.h"
+#endif
 
 /**
  *  Set up namespace
@@ -778,6 +785,17 @@ public:
         return mapValue<T>();
     }
 
+
+    /**
+     * Return reference to class name zend_string, if object
+     */
+    ZString className();
+    
+    /**
+     * Return reference counted zend_string*
+     * @return ZString
+     */
+    ZString zendStr() const;
     /**
      *  Get access to a certain array member
      *  @param  index
@@ -1159,6 +1177,8 @@ private:
      */
     Value& operator=(struct _zval_struct* value);
 
+
+
 protected:
     /**
      *  The wrapped zval
@@ -1242,6 +1262,7 @@ protected:
     friend class Script;
     friend class ConstantImpl;
     friend class Stream;
+    friend class ClassCheck;
 
     /**
      *  Friend functions which have to access that zval directly
@@ -1280,3 +1301,6 @@ X &operator%=(X &x, const Php::Value &value) { return x %= static_cast<X>(value)
  *  End of namespace
  */
 }
+
+
+#endif

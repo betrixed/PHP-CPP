@@ -74,6 +74,8 @@
 #include "../include/type.h"
 #include "../include/message.h"
 #include "../include/hashparent.h"
+
+
 #include "../include/value.h"
 #include "../include/valueiterator.h"
 #include "../include/array.h"
@@ -106,6 +108,11 @@
 #include "../include/file.h"
 #include "../include/function.h"
 #include "../include/stream.h"
+
+// new insertions 
+#include "../include/classcheck.h"
+#include "../include/matchregx.h"
+// end new insertions
 
 /**
  *  Common header files for internal use only
