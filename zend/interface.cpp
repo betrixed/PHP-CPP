@@ -21,7 +21,7 @@ namespace Php {
  *  Constructor
  *  @param  name
  */
-Interface::Interface(const char *name) : ClassBase(name, ClassType::Interface) {}
+Interface::Interface(const char *name) : ClassBase(name, ClassType::Interface, MagicFlags::AllMagic) {}
 
 /**
  *  End of namespace

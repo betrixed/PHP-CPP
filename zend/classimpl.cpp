@@ -382,7 +382,8 @@ zend_object_handlers *ClassImpl::objectHandlers()
 
     // when a method is called (__call and __invoke)
     _handlers.get_method = &ClassImpl::getMethod;
-    _handlers.get_closure = &ClassImpl::getClosure;
+    
+    _handlers.get_closure = nullptr; // &ClassImpl::getClosure; // not supporting this for all objects
 
     // register destructor and deallocator
     _handlers.dtor_obj = &ClassImpl::destructObject;

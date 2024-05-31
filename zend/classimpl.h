@@ -25,12 +25,17 @@ namespace Php {
 # define ZEND_OBJECT_OR_ZVAL zend_object *
 # define ZEND_STRING_OR_ZVAL zend_string *
 #endif
+
+
+
 /**
  *  Class definition
  */
 class ClassImpl
 {
 private:
+
+
     /**
      *  Pointer to the actual Php::Class<X> that is created in the extension
      *  @var    ClassBase
@@ -116,6 +121,9 @@ private:
      *
      *  @return zend_function_entry[]
      */
+
+    MagicFlags  _magicflags;
+
     const zend_function_entry *entries();
 
     /**
@@ -141,7 +149,8 @@ public:
      *  @param  name            Class name
      *  @param  type            Class type
      */
-    ClassImpl(const char *name, ClassType type) : _name(name), _type(type) {}
+    ClassImpl(const char *name, ClassType type, MagicFlags magics = MagicFlags::AllMagic) 
+        : _name(name), _type(type), _magicflags(magics) {}
 
     /**
      *  No copying or moving

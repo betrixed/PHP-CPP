@@ -18,12 +18,12 @@ namespace Php {
  *  @param  classname   Class name
  *  @param  flags       Class flags
  */
-ClassBase::ClassBase(const char *classname, int flags)
+ClassBase::ClassBase(const char *classname, int flags, MagicFlags magic)
 {
     // the flags hold a method-flag-value, this should be converted into a class-type
-    if (flags & Abstract) _impl = std::make_shared<ClassImpl>(classname, ClassType::Abstract);
-    else if (flags & Final) _impl = std::make_shared<ClassImpl>(classname, ClassType::Final);
-    else _impl = std::make_shared<ClassImpl>(classname, ClassType::Regular);
+    if (flags & Abstract) _impl = std::make_shared<ClassImpl>(classname, ClassType::Abstract, magic);
+    else if (flags & Final) _impl = std::make_shared<ClassImpl>(classname, ClassType::Final, magic);
+    else _impl = std::make_shared<ClassImpl>(classname, ClassType::Regular, magic);
 }
 
 /**
@@ -31,10 +31,10 @@ ClassBase::ClassBase(const char *classname, int flags)
  *  @param  classname   Class name
  *  @param  type        Class type
  */
-ClassBase::ClassBase(const char *classname, ClassType type)
+ClassBase::ClassBase(const char *classname, ClassType type, MagicFlags magic)
 {
     // construct implementation
-    _impl = std::make_shared<ClassImpl>(classname, type);
+    _impl = std::make_shared<ClassImpl>(classname, type, magic);
 }
 
 /**

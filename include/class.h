@@ -36,7 +36,8 @@ public:
      *  @param  name        Name of the class
      *  @param  flags       Accessibility flags
      */
-    Class(const char *name, int flags = 0) : ClassBase(name, flags) {}
+    Class(const char *name, int flags = 0, MagicFlags magic = MagicFlags::AllMagic) 
+    : ClassBase(name, flags, magic) {}
 
     /**
      *  Copy constructor

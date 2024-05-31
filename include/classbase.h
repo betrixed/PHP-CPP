@@ -72,6 +72,13 @@ typedef Value   (Base::*getter_callback_0)();
 typedef Value   (Base::*getter_callback_1)() const;
 typedef void    (Base::*setter_callback_0)(const Php::Value &value);
 typedef void    (Base::*setter_callback_1)(const Php::Value &value) const;
+
+enum class MagicFlags {
+    AllMagic = 0,
+    NoInvoke = 1
+};
+
+
 /**
  *  Class definition
  */
@@ -83,14 +90,14 @@ protected:
      *  @param  classname   Class name
      *  @param  flags       Class flags
      */
-    ClassBase(const char *classname, int flags);
+    ClassBase(const char *classname, int flags, MagicFlags magic);
 
     /**
      *  Protected constructor
      *  @param  classname   Class name
      *  @param  type        Class type
      */
-    ClassBase(const char *classname, ClassType type);
+    ClassBase(const char *classname, ClassType type, MagicFlags magic);
 
 public:
     /**
