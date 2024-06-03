@@ -108,6 +108,40 @@ public:
         return *this;
     }
 
+
+    /*
+     * Value class also has overloaded versions of unset.
+     */
+
+    bool remove(const Php::Value& value) {
+        if (value.type() != Type::Array) throw Error("Remove on none-array variable");
+        if (value.isNumeric())
+        {
+            return zend_hash_index_del(Z_ARRVAL_P(_val), value.numericValue()) == SUCCESS;
+        }
+        else if (value.isString())
+        {
+            return zend_hash_del(Z_ARRVAL_P(_val), Z_STR_P(value._val)) == SUCCESS;
+        }
+        return false;
+    }
+
+    /**
+     * Maybe faster than a call to "isset".
+     */
+    bool haskey(const Php::Value& value) const {
+        if (value.type() != Type::Array) throw Error("Isset on none-array variable");
+        if (value.isNumeric())
+        {
+            return zend_hash_index_exists(Z_ARRVAL_P(_val), value.numericValue());
+        }
+        else if (value.isString())
+        {
+            return zend_hash_exists(Z_ARRVAL_P(_val), Z_STR_P(value._val));
+        }
+        return false;
+    }
+
     void push(const Php::Value& value) {
         if (value.type() != Type::Array) throw Error("Push variable to non-array");
         zend_hash_next_index_insert(Z_ARRVAL_P(_val), value._val);
