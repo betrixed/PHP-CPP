@@ -108,6 +108,10 @@ public:
         return *this;
     }
 
+    void push(const Php::Value& value) {
+        if (value.type() != Type::Array) throw Error("Push variable to non-array");
+        zend_hash_next_index_insert(Z_ARRVAL_P(_val), value._val);
+    }
     /**
      *  Move assignment operator
      *  @param  value

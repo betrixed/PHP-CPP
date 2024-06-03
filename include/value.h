@@ -1249,6 +1249,7 @@ protected:
      *  The Globals and Member classes can access the zval directly
      */
     friend class Globals;
+    friend class Array;
     friend class Member;
     friend class ClassImpl;
     friend class IteratorImpl;
