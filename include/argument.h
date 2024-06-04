@@ -54,7 +54,7 @@ protected:
         _name(name), _type(Type::Object), _classname(classname), _nullable(nullable), _required(required), _byReference(byref) 
     {
         // for nullable classes, zend uses a "?name" encoding, so we need some extra space
-        if (!_nullable) return;
+        if (!_nullable) return; // This condition also causes a seg-fault
         
         // allocate extra space
         _classname = new char[::strlen(classname) + 2];
