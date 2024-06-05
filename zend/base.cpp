@@ -294,6 +294,29 @@ Php::Value Base::__getIterator()
     return this;
 }
 
+Value Base::properties()
+{
+    zend_object* obj;
+
+    obj = _impl->php();
+
+    HashTable *properties = obj->handlers->get_properties(obj);
+
+    if (!properties) {
+        return nullptr;
+    }
+
+    properties = zend_proptable_to_symtable(properties,
+        (obj->ce->default_properties_count ||
+         obj->handlers != &std_object_handlers ||
+         GC_IS_RECURSIVE(properties)));
+    
+    zval result;
+
+    ZVAL_ARR(&result, properties);
+
+    return &result;
+}
 /**
  *  End namespace
  */

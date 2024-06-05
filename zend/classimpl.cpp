@@ -374,16 +374,22 @@ zend_object_handlers *ClassImpl::objectHandlers()
     _handlers.has_dimension = &ClassImpl::hasDimension;
     _handlers.unset_dimension = &ClassImpl::unsetDimension;
 
-    // functions for the magic properties handlers (__get, __set, __isset and __unset)
-    _handlers.write_property = &ClassImpl::writeProperty;
-    _handlers.read_property = &ClassImpl::readProperty;
-    _handlers.has_property = &ClassImpl::hasProperty;
-    _handlers.unset_property = &ClassImpl::unsetProperty;
+    if ( (_magicflags & MagicFlags::PropertySet) != MagicFlags::NoMagic) 
+        _handlers.write_property =  &ClassImpl::writeProperty;
+    if ( (_magicflags & MagicFlags::PropertyGet) != MagicFlags::NoMagic) 
+        _handlers.read_property = &ClassImpl::readProperty;
+    if ( (_magicflags & MagicFlags::PropertyHas) != MagicFlags::NoMagic) 
+         _handlers.has_property = &ClassImpl::hasProperty;
+    if ( (_magicflags & MagicFlags::PropertyUnset) != MagicFlags::NoMagic) 
+         _handlers.unset_property = &ClassImpl::unsetProperty;
+
 
     // when a method is called (__call and __invoke)
     _handlers.get_method = &ClassImpl::getMethod;
     
-    _handlers.get_closure = nullptr; // &ClassImpl::getClosure; // not supporting this for all objects
+    //_handlers.get_closure = nullptr; // &ClassImpl::getClosure; // not supporting this for all objects
+    if ( (_magicflags & MagicFlags::Invoke) != MagicFlags::NoMagic) 
+        _handlers.get_closure = &ClassImpl::getClosure;
 
     // register destructor and deallocator
     _handlers.dtor_obj = &ClassImpl::destructObject;
@@ -965,7 +971,11 @@ zval *ClassImpl::readProperty(ZEND_OBJECT_OR_ZVAL object, ZEND_STRING_OR_ZVAL na
  *  @param  cache_slot      The cache slot used
  *  @return zval
  */
-PHP_WRITE_PROP_HANDLER_TYPE ClassImpl::writeProperty(ZEND_OBJECT_OR_ZVAL object, ZEND_STRING_OR_ZVAL name, zval *value, void **cache_slot)
+PHP_WRITE_PROP_HANDLER_TYPE ClassImpl::writeProperty(
+    ZEND_OBJECT_OR_ZVAL object, 
+    ZEND_STRING_OR_ZVAL name, 
+    zval *value, 
+    void **cache_slot)
 {
     // retrieve the object and class
     Base *base = ObjectImpl::find(object)->object();

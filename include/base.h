@@ -52,6 +52,8 @@ public:
      */
     virtual ~Base() = default;
 
+
+    Php::Value properties();
     /**
      *  Get access to a property by name using the [] operator
      *  @param  string
@@ -292,6 +294,7 @@ public:
      *  @return Php::Value
      */
     Php::Value __getIterator();
+
 
 
 private:

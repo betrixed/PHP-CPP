@@ -74,10 +74,25 @@ typedef void    (Base::*setter_callback_0)(const Php::Value &value);
 typedef void    (Base::*setter_callback_1)(const Php::Value &value) const;
 
 enum class MagicFlags {
-    AllMagic = 0,
-    NoInvoke = 1
+
+    Invoke = 1,
+    PropertySet = 2, // __get, __set, __isset and __unset no overide
+    PropertyGet = 4,
+    PropertyHas = 8,
+    PropertyUnset = 16,
+    PropertyFn = 30,
+    AllMagic = 31,
+    NoMagic = 0
 };
 
+inline MagicFlags operator&(MagicFlags a, MagicFlags b)
+{
+    return static_cast<MagicFlags>(static_cast<int>(a) & static_cast<int>(b));
+}
+inline MagicFlags operator|(MagicFlags a, MagicFlags b)
+{
+    return static_cast<MagicFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
 
 /**
  *  Class definition

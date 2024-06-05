@@ -122,7 +122,12 @@ private:
      *  @return zend_function_entry[]
      */
 
-    MagicFlags  _magicflags;
+    /**
+     *  Avoid settings some handlers 
+     *  which throw default exceptions
+     *  when not overriden;
+     */
+    MagicFlags  _magicflags; 
 
     const zend_function_entry *entries();
 

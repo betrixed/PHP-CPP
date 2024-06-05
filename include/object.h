@@ -155,6 +155,8 @@ public:
         return *this;
     }
 
+    Value properties();
+    
 private:
     /**
      *  Helper method to instantiate an object

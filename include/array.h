@@ -114,7 +114,7 @@ public:
      */
 
     bool remove(const Php::Value& value) {
-        if (value.type() != Type::Array) throw Error("Remove on none-array variable");
+
         if (value.isNumeric())
         {
             return zend_hash_index_del(Z_ARRVAL_P(_val), value.numericValue()) == SUCCESS;
@@ -130,7 +130,7 @@ public:
      * Maybe faster than a call to "isset".
      */
     bool haskey(const Php::Value& value) const {
-        if (value.type() != Type::Array) throw Error("Isset on none-array variable");
+
         if (value.isNumeric())
         {
             return zend_hash_index_exists(Z_ARRVAL_P(_val), value.numericValue());
@@ -143,7 +143,7 @@ public:
     }
 
     void push(const Php::Value& value) {
-        if (value.type() != Type::Array) throw Error("Push variable to non-array");
+
         zend_hash_next_index_insert(Z_ARRVAL_P(_val), value._val);
     }
     /**
