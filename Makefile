@@ -101,7 +101,7 @@ endif
 #   you want to leave that flag out on production servers).
 #
 
-COMPILER_FLAGS			=	-Wall -c -std=c++17 -fvisibility=hidden -DBUILDING_PHPCPP -Wno-write-strings -MD -fpic `${PHP_CONFIG} --includes`
+COMPILER_FLAGS			=	-Wall -c -std=c++20 -fvisibility=hidden -DBUILDING_PHPCPP -Wno-write-strings -MD -fpic `${PHP_CONFIG} --includes`
 
 #
 #   Linker flags

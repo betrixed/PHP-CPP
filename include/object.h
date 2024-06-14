@@ -84,6 +84,9 @@ public:
      */
     Object(const char *name) : Value() { if (instantiate(name)) call("__construct"); }
 
+    // allow construction with explicit other type, eg null 
+    // but can only be assigned with an object type.
+    Object(Type type) : Value(type) {}
     /**
      *  Constructor to create a new instance
      *
@@ -125,6 +128,7 @@ public:
         // skip self assignment
         if (this == &value) return *this;
 
+
         // type must be valid
         if (value.type() != Type::Object) throw Error("Assigning a non-object to an object variable");
 
@@ -134,6 +138,8 @@ public:
         // done
         return *this;
     }
+
+
 
     /**
      *  Move assignment operator

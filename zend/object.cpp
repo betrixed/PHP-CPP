@@ -143,11 +143,11 @@ Value Object::properties()
          obj->handlers != &std_object_handlers ||
          GC_IS_RECURSIVE(properties)));
     
-    zval result;
+    Value result;
 
-    ZVAL_ARR(&result, properties);
+    ZVAL_ARR(result._val, properties);
 
-    return &result;
+    return result;
 }
 /**
  *  End namespace

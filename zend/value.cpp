@@ -902,6 +902,22 @@ bool Value::isCallable(const char *name)
     return result;
 }
 
+
+
+/**
+ *  Call the method - if the variable holds an object with the given method
+ *  @param  name        name of the method to call
+ *  @return Value
+ */
+Value Value::call(const char *name)
+{
+    // wrap the name in a Php::Value to get a zval
+    Value method(name);
+
+    // call helper function
+    return do_exec(_val, method._val, 0, nullptr);
+}
+
 /**
  *  Call the method - if the variable holds an object with the given method
  *  @param  name        name of the method to call
@@ -916,19 +932,6 @@ Value Value::call(const char *name) const
     return do_exec(_val, method._val, 0, nullptr);
 }
 
-/**
- *  Call the method - if the variable holds an object with the given method
- *  @param  name        name of the method to call
- *  @return Value
- */
-Value Value::call(const char *name)
-{
-    // wrap the name in a Php::Value to get a zval
-    Value method(name);
-
-    // call  helper function
-    return do_exec(_val, method._val, 0, nullptr);
-}
 
 /**
  *  Call function with a number of parameters

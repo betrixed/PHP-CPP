@@ -24,7 +24,8 @@ public:
      *  @param  type        Argument type
      *  @param  required    Is this argument required?
      */
-    ByVal(const char *name, Type type = Type::Null, bool required = true) : Argument(name, type, required, false) {}
+    ByVal(const char *name, Type type = Type::Null, bool required = true) 
+    : Argument(name, type, required, false) {}
 
     /**
      *  Constructor
@@ -33,7 +34,8 @@ public:
      *  @param  nullable    Can it be null?
      *  @param  required    Is this argument required?
      */
-    ByVal(const char *name, const char *classname, bool nullable = false, bool required = true) : Argument(name, classname, nullable, required, false) {}
+    ByVal(const char *name, const char *classname, bool nullable = false, bool required = true) 
+        : Argument(name, classname, nullable, required, false) {}
 
     /**
      *  Copy constructor

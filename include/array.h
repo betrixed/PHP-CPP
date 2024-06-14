@@ -143,8 +143,13 @@ public:
     }
 
     void push(const Php::Value& value) {
-
-        zend_hash_next_index_insert(Z_ARRVAL_P(_val), value._val);
+        zval data;
+        // take care of any reference counted values
+        ZVAL_COPY(&data, value._val);
+        if (add_next_index_zval(_val, &data) != SUCCESS) {
+            Z_TRY_DELREF(data);
+        }
+        //zend_hash_next_index_insert(Z_ARRVAL_P(_val), value._val);
     }
     /**
      *  Move assignment operator

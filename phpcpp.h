@@ -74,5 +74,7 @@
 #include <phpcpp/file.h>
 #include <phpcpp/function.h>
 #include <phpcpp/stream.h>
+#include <phpcpp/matchregx.h>
+#include <phpcpp/classcheck.h>
 
 #endif /* phpcpp.h */

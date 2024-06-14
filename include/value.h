@@ -1250,6 +1250,7 @@ protected:
      */
     friend class Globals;
     friend class Array;
+    friend class Object;
     friend class Member;
     friend class ClassImpl;
     friend class IteratorImpl;
