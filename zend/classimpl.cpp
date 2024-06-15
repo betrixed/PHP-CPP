@@ -374,13 +374,16 @@ zend_object_handlers *ClassImpl::objectHandlers()
     _handlers.has_dimension = &ClassImpl::hasDimension;
     _handlers.unset_dimension = &ClassImpl::unsetDimension;
 
-    if ( (_magicflags & MagicFlags::PropertySet) != MagicFlags::NoMagic) 
+    if ( (_magicflags & MagicFlags::PropertySet) != MagicFlags::None) 
         _handlers.write_property =  &ClassImpl::writeProperty;
-    if ( (_magicflags & MagicFlags::PropertyGet) != MagicFlags::NoMagic) 
+
+    if ( (_magicflags & MagicFlags::PropertyGet) != MagicFlags::None) 
         _handlers.read_property = &ClassImpl::readProperty;
-    if ( (_magicflags & MagicFlags::PropertyHas) != MagicFlags::NoMagic) 
+
+    if ( (_magicflags & MagicFlags::PropertyHas) != MagicFlags::None) 
          _handlers.has_property = &ClassImpl::hasProperty;
-    if ( (_magicflags & MagicFlags::PropertyUnset) != MagicFlags::NoMagic) 
+     
+    if ( (_magicflags & MagicFlags::PropertyUnset) != MagicFlags::None) 
          _handlers.unset_property = &ClassImpl::unsetProperty;
 
 
@@ -388,7 +391,7 @@ zend_object_handlers *ClassImpl::objectHandlers()
     _handlers.get_method = &ClassImpl::getMethod;
     
     //_handlers.get_closure = nullptr; // &ClassImpl::getClosure; // not supporting this for all objects
-    if ( (_magicflags & MagicFlags::Invoke) != MagicFlags::NoMagic) 
+    if ( (_magicflags & MagicFlags::Invoke) != MagicFlags::None) 
         _handlers.get_closure = &ClassImpl::getClosure;
 
     // register destructor and deallocator
@@ -1596,7 +1599,13 @@ zend_class_entry *ClassImpl::initialize(ClassBase *base, const std::string &pref
     }
 
     // instal the right modifier (to make the class an interface, abstract class, etc)
-    _entry->ce_flags |= uint64_t(_type);
+    uint64_t class_flags = uint64_t(_type);
+
+    if ((_magicflags & MagicFlags::DynamicValues) != MagicFlags::None) {
+        class_flags |= ZEND_ACC_ALLOW_DYNAMIC_PROPERTIES;
+    }
+
+    _entry->ce_flags |= class_flags;
 
     // this pointer has to be copied to temporary pointer, as &this causes compiler error
     ClassImpl *impl = this;

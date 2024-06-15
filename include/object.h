@@ -161,7 +161,6 @@ public:
         return *this;
     }
 
-    Value properties();
     
 private:
     /**

@@ -126,29 +126,6 @@ bool Object::instantiate(const char *name)
     return zend_hash_exists(&entry->function_table, construct);
 }
 
-Value Object::properties()
-{
-    zend_object* obj;
-
-    obj = Z_OBJ_P(_val);
-
-    HashTable *properties = obj->handlers->get_properties(obj);
-
-    if (!properties) {
-        return nullptr;
-    }
-
-    properties = zend_proptable_to_symtable(properties,
-        (obj->ce->default_properties_count ||
-         obj->handlers != &std_object_handlers ||
-         GC_IS_RECURSIVE(properties)));
-    
-    Value result;
-
-    ZVAL_ARR(result._val, properties);
-
-    return result;
-}
 /**
  *  End namespace
  */
