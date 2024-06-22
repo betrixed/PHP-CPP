@@ -428,6 +428,15 @@ public:
     bool isScalar()     const { return isNull() || isNumeric() || isBool() || isString() || isFloat(); }
     bool isCallable()   const;
 
+
+    bool isTrue() {
+        return (type() == Php::Type::True);
+    }
+
+
+    bool isFalse() {
+        return (type() == Php::Type::False);
+    }
     /**
      *  Get access to the raw buffer - you can use this for direct reading and
      *  writing to and from the buffer. Note that this only works for string

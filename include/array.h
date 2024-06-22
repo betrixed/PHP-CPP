@@ -142,7 +142,7 @@ public:
         return false;
     }
 
-    void push(const Php::Value& value) {
+    void push_back(const Php::Value& value) {
         zval data;
         // take care of any reference counted values
         ZVAL_COPY(&data, value._val);

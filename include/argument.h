@@ -27,7 +27,8 @@ public:
      */
     virtual ~Argument()
     {
-        // deallocate data if needed (we should not do this, memory buffer must be preserved for the duration of the program)
+        // we should not do this, 
+        // as memory buffer must be preserved for the duration of the program
         // if (_nullable) delete[] _classname;
     }
 
@@ -40,7 +41,11 @@ protected:
      *  @param  byref       Is this a reference argument
      */
     Argument(const char *name, Type type, bool required = true, bool byref = false) :
-        _name(name), _type(type), _required(required), _byReference(byref) {}
+        _name(name), _type(type), _required(required), _byReference(byref) {
+            if (!_required) {
+                _nullable = true; // if not required , then it can be null?
+            }
+        }
 
     /**
      *  Constructor
@@ -53,22 +58,47 @@ protected:
     Argument(const char *name, const char *classname, bool nullable = true, bool required = true, bool byref = false) :
         _name(name), _type(Type::Object), _classname(classname), _nullable(nullable), _required(required), _byReference(byref) 
     {
-        // for nullable classes, zend uses a "?name" encoding, so we need some extra space
-        if (!_nullable) return; // This condition also causes a seg-fault
-        
-        // allocate extra space
-        _classname = new char[::strlen(classname) + 2];
-        
-        // copy the data
-        strcpy((char *)_classname, "?");
-        strcpy((char *)_classname + 1, classname);
+        // For some reason NO IDEA WHY, memory allocators? gcc? always making buffered copy of classname
+        // seems to prevent a segfault when nullable is false
+        // this may be when argument values passed
+        // declared as const char*, or static const char*
+        /* OFFENDING CODE
+        if (!_nullable) 
+            return;
+
+        auto slen = ::strlen(_classname);
+        auto cbuf = new char[slen + 2]; // room for ? and NULL
+        char* dest = cbuf;
+        strcpy(dest, "?");
+        dest++;
+        strcpy(dest, _classname);
+        _classname = cbuf;
+        */
+
+        // THIS WORKS OK. Always making a classname copy seems to avert segfault on PHP load.
+        // Had to recompile all classes using this as well.
+        auto slen = ::strlen(classname);
+        if (_nullable) {
+            slen++; // for ?
+        }
+        // make a buffer
+        auto cbuf = new char[slen + 1]; // NULL
+        char* dest = cbuf; // moving pointer
+
+        if (_nullable) {
+            strcpy(dest, "?");
+            dest++;
+        }
+        strcpy(dest, classname);
+        _classname = cbuf;
+
     }
 
 public:
     /**
      *  Is this a required argument?
      *  @return bool
-     *  @internal
+     *  @internalsudo
      */
     bool required() const
     {
