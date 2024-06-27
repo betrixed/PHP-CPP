@@ -142,6 +142,10 @@ public:
         return false;
     }
 
+    HashTable* getHashTable() const {
+        return Z_ARRVAL_P(_val);
+    }
+
     void push_back(const Php::Value& value) {
         zval data;
         // take care of any reference counted values
