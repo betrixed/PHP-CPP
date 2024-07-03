@@ -19,7 +19,13 @@ namespace Php {
 
 /**
  *  Wrapper class for a zend_string
+ *  suitable to take std::string_view from.
+ * Uses per-request allocation, unlike Php::String,
+ * which assumes persistent storage.
  */
+
+
+
 class PHPCPP_EXPORT ZString
 {
 private:
@@ -28,6 +34,9 @@ private:
      *  @var    zend_string*
      */
     zend_string *_string;
+
+    void init_str(const char *string, size_t size);
+
 public:
     /**
      *  Constructor
@@ -36,8 +45,15 @@ public:
      */
     ZString(zend_string *string) : _string(string)
     {
-        // add another reference to the string
+        // add a reference to the string
         zend_string_addref(_string);
+    }
+
+
+    ZString(zval *z)
+    {
+        //assign string with a new reference
+        _string = zval_get_string(z); // 
     }
 
     // a null constructer
@@ -49,14 +65,14 @@ public:
      *
      *  @param  string  The string to wrap
      */
-    ZString(const std::string &string) : _string(zend_string_init(string.data(), string.size(), 1)) {}
+    ZString(const std::string &string);
 
     /**
      *  Constructor
      *
      *  @param  string  The string to wrap
      */
-    ZString(const char *string) : _string(zend_string_init(string, std::strlen(string), 1)) {}
+    ZString(const char *string);
 
     /**
      *  Constructor
@@ -64,7 +80,7 @@ public:
      *  @param  string  The string to wrap
      *  @param  size    Number of bytes in the string
      */
-    ZString(const char *string, size_t size) : _string(zend_string_init(string, size, 1)) {}
+    ZString(const char *string, size_t size);
 
     /**
      *  Constructor
@@ -72,7 +88,7 @@ public:
      *  @param  string  The string to wrap
      */
     template <size_t size>
-    ZString(const char (&string)[size]) : _string(zend_string_init(string, size - 1, 1)) {}
+    ZString(const char (&string)[size]) : _string(zend_string_init(string, size - 1, 0)) {}
 
     /**
      *  Copy constructor
@@ -85,6 +101,9 @@ public:
         zend_string_addref(_string);
     }
 
+
+    ZString(const Value& v); // need to define this in cpp file
+
     /**
      *  Move constructor
      *
@@ -96,6 +115,8 @@ public:
         that._string = nullptr;
     }
 
+    // Only defined while ZString exists
+    std::string_view vstr() const;
     /**
      *  Destructor
      */
@@ -150,6 +171,10 @@ public:
         return _string;
     }
 
+    void debugStr(std::ostream& os) const
+    {
+        os << data() << " " << size() << " rc= " << GC_REFCOUNT(_string) << std::endl;
+    }
     /**
      *  Retrieve the underlying string
      *

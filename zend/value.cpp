@@ -108,6 +108,12 @@ Value::Value(const std::string &value)
     ZVAL_STRINGL(_val, value.c_str(), value.size());
 }
 
+Value::Value(const std::string_view &value)
+{
+    // create a string zval
+    ZVAL_STRINGL(_val, value.data(), value.size());
+}
+
 /**
  *  Constructor based on a byte array
  *  @param  value
@@ -1345,6 +1351,7 @@ std::string Value::stringValue() const
     return ret;
 }
 
+
 /**
  *  Access to the raw buffer
  *  @return char *
@@ -1382,13 +1389,15 @@ Value Value::className() {
     }
     return Php::Value();
 }
+
+
+
 /**
  * Useful for passing to PHP functions
  */ 
 ZString Value::zendStr() const {
     zval* z = _val;
-    zend_string* zs = zval_get_string(z);
-    return ZString(zs);
+    return ZString(z);
 }
 /**
  *  Helper function for string comparison

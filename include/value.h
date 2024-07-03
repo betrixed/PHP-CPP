@@ -66,6 +66,7 @@ public:
     Value(const void *value) = delete;
     Value(char value);
     Value(const std::string &value);
+    Value(const std::string_view &value);
     Value(const char *value, int size = -1);
     Value(struct _zend_string *value);
     Value(double value);
@@ -805,6 +806,8 @@ public:
      * @return ZString
      */
     ZString zendStr() const;
+
+
     /**
      *  Get access to a certain array member
      *  @param  index
@@ -829,6 +832,7 @@ public:
     {
         return get(key.c_str(), key.size());
     }
+
 
     /**
      *  Get access to a certain variant member
@@ -869,6 +873,16 @@ public:
     void set(const char *key, const Value &value)
     {
         set(key, ::strlen(key), value);
+    }
+
+    Value get(const std::string_view &key) const
+    {
+        return get(key.data(), key.size());
+    }
+
+    void set(const std::string_view &key, const Value &value) 
+    {
+        return set(key.data(), key.size(), value);
     }
 
     /**
@@ -975,6 +989,10 @@ public:
         return get(key);
     }
 
+    Value operator[](const std::string_view &key) const 
+    {
+        return get(key);
+    }
     /**
      *  Array access operator
      *  This can be used for accessing associative arrays
@@ -1274,6 +1292,7 @@ protected:
     friend class ConstantImpl;
     friend class Stream;
     friend class ClassCheck;
+    friend class ZString;
 
     /**
      *  Friend functions which have to access that zval directly
